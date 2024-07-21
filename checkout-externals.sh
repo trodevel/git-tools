@@ -1,10 +1,27 @@
 #!/bin/bash
 
+#<hb>***************************************************************************
+#
+# checkout git externals
+#
+# USAGE: checkout-externals.sh [<project-externals>]
+#
+# Example: checkout-externals.sh
+#
+#          checkout-externals.sh project-externals.cfg
+#
+#<he>***************************************************************************
+
+show_help()
+{
+    sed -e '1,/^#<hb>/d' -e '/^#<he>/,$d' $0 | cut -c 3-
+}
+
 checkout()
 {
     local repo=$1
-    local dir=$2
-    local branch=$3
+    local branch=$2
+    local dir=$3
 
     [[ -z $dir ]] && dir=$( echo "$repo" | sed "s~.*/\([a-zA-Z0-9_\-]*\)~externals/\1~") #"
 
@@ -21,11 +38,33 @@ checkout()
     fi
 }
 
-checkout git@github.com:trodevel/python_mysql_executor     ""        1.1.0
-checkout git@github.com:trodevel/hr_common_types           ""        1.3.0
-checkout git@github.com:trodevel/hr_query_parser           ""        4.0.0
-checkout git@github.com:trodevel/hr_hunt_db                ""        2.0.0
-checkout git@github.com:trodevel/mysql_unique_id_generator ""        1.0.0
-checkout git@github.com:trodevel/aux_logger                ""        1.1.0
-checkout git@github.com:trodevel/languages                 ""        1.0.0
-checkout git@github.com:trodevel/currencies                ""        1.0.0
+process_line()
+{
+    local LN="$1"
+
+    local repo=$(     echo "$LN" | awk '{print $1;}' )
+    local branch=$(   echo "$LN" | awk '{print $2;}' )
+    local dest_dir=$( echo "$LN" | awk '{print $3;}' )
+
+    echo "DEBUG: repo $repo, branch $branch, dest_dir '$dest_dir'"
+
+    checkout "$repo" "$branch" "$dest_dir"
+}
+
+process()
+{
+    local INP=$1
+
+    while IFS= read -r line;
+    do
+        process_line "$line"
+    done < $INP
+}
+
+CONFIG=$1
+
+[[ -z $CONFIG ]] && CONFIG=project-externals.cfg
+
+[[ ! -f $CONFIG ]] && echo "ERROR: cannot find config file $CONFIG" && show_help && exit
+
+process $CONFIG
