@@ -44,7 +44,7 @@ process_line()
     local branch=$(   echo "$LN" | awk '{print $2;}' )
     local dest_dir=$( echo "$LN" | awk '{print $3;}' )
 
-    echo "DEBUG: repo $repo, branch $branch, dest_dir '$dest_dir'"
+    #echo "DEBUG: repo $repo, branch $branch, dest_dir '$dest_dir'"
 
     [[ -z $dest_dir ]] && dest_dir=$( echo "$repo" | sed "s~.*/\([a-zA-Z0-9_\-]*\)~externals/\1~") #"
 
