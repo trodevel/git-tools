@@ -23,8 +23,6 @@ checkout()
     local branch=$2
     local dir=$3
 
-    [[ -z $dir ]] && dir=$( echo "$repo" | sed "s~.*/\([a-zA-Z0-9_\-]*\)~externals/\1~") #"
-
     if [[ ! -d $dir ]]
     then
         git clone $repo $dir
@@ -47,6 +45,8 @@ process_line()
     local dest_dir=$( echo "$LN" | awk '{print $3;}' )
 
     echo "DEBUG: repo $repo, branch $branch, dest_dir '$dest_dir'"
+
+    [[ -z $dest_dir ]] && dest_dir=$( echo "$repo" | sed "s~.*/\([a-zA-Z0-9_\-]*\)~externals/\1~") #"
 
     checkout "$repo" "$branch" "$dest_dir"
 }
