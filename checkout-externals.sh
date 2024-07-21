@@ -65,6 +65,6 @@ CONFIG=$1
 
 [[ -z $CONFIG ]] && CONFIG=project-externals.cfg
 
-[[ ! -f $CONFIG ]] && echo "ERROR: cannot find config file $CONFIG" && show_help && exit
+[[ ! -f $CONFIG ]] && { echo "ERROR: cannot find config file $CONFIG"; show_help; exit 1; }
 
 process $CONFIG
