@@ -57,7 +57,8 @@ process()
 
     while IFS= read -r line;
     do
-        [[ ( -z "$line" ) || ( "$line" =~ '^\s+$' ) ]] && continue
+        [[ -z "$line" ]] && continue
+        [[ "$line" =~ '^\s+$' ]] && continue
         process_line "$line"
     done < $INP
 }
