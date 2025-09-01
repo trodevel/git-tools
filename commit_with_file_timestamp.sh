@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A script to commit a file to Git, setting the commit and author
+# A script to commit changes to Git, setting the commit and author
 # dates to the modification timestamp of the file.
 
 # Check if the correct number of arguments are provided.
@@ -38,8 +38,8 @@ GIT_DATE_STRING="${TIMESTAMP} ${TIMEZONE_OFFSET}"
 # 3. Execute the git commit command with the dates set.
 # The `GIT_AUTHOR_DATE` and `GIT_COMMITTER_DATE` environment variables
 # override the default values.
-echo "Committing '$FILE_PATH' with timestamp $(date -d "@$TIMESTAMP" "+%Y-%m-%d %H:%M:%S")"
-GIT_AUTHOR_DATE="$GIT_DATE_STRING" GIT_COMMITTER_DATE="$GIT_DATE_STRING" git commit "$FILE_PATH" -m "$COMMIT_MESSAGE"
+echo "Committing with timestamp $(date -d "@$TIMESTAMP" "+%Y-%m-%d %H:%M:%S")"
+GIT_AUTHOR_DATE="$GIT_DATE_STRING" GIT_COMMITTER_DATE="$GIT_DATE_STRING" git commit -m "$COMMIT_MESSAGE"
 
 # Check the exit status of the git commit command.
 if [ $? -eq 0 ]; then
